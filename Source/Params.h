@@ -107,8 +107,8 @@ inline juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout
 
     layout.add (std::make_unique<FloatParam> (juce::ParameterID { gain, 1 }, "Gain",
                                               juce::NormalisableRange<float> {
-                                                  -60.0f,
-                                                  6.0f,
+                                                   -60.0f,
+                                                   0.0f,
                                                   [] (float start, float end, float normalised) {
                                                       return start + (end - start) * std::pow (normalised, 0.2f);
                                                   },

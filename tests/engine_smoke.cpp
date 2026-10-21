@@ -99,7 +99,7 @@ int main()
     {
         const float vowelPos = static_cast<float> (block % 100) / 100.0f;
         float gains[3] = { 0.0f, -3.0f, -6.0f };
-        engine.setTargets (vowelPos, 0.7f, 900.0f, 0.6f, 1, gains, 3.0f, 0.4f);
+        engine.setTargets (vowelPos, 0.7f, 900.0f, 0.6f, 1, gains, 0.0f, 0.4f);
 
         auto buf = makeSineBuffer (2, 512, block);
         engine.process (buf, midi);
@@ -158,7 +158,7 @@ int main()
     const auto wetRead  = runMaster (engine, 0.0f, 1.0f);
     const auto midRead  = runMaster (engine, 0.0f, 0.5f);
     const auto muteRead = runMaster (engine, -60.0f, 1.0f);
-    const auto loudRead = runMaster (engine, 6.0f, 1.0f);
+    const auto loudRead = runMaster (engine, 0.0f, 1.0f);
     const auto lowRead  = runMaster (engine, -12.0f, 1.0f);
 
     if (dryRead.rms < 0.05f)
@@ -193,7 +193,7 @@ int main()
 
     if (!(loudRead.rms > lowRead.rms * 3.0f))
     {
-        std::printf ("gain not monotonic: -12dB rms=%.4f +6dB rms=%.4f\n", lowRead.rms, loudRead.rms);
+        std::printf ("gain not monotonic: -12dB rms=%.4f 0dB rms=%.4f\n", lowRead.rms, loudRead.rms);
         masterOk = false;
     }
 
