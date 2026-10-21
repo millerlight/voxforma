@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cmath>
 #include <juce_audio_processors/juce_audio_processors.h>
 
 namespace vox
@@ -105,7 +106,18 @@ inline juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout
     }
 
     layout.add (std::make_unique<FloatParam> (juce::ParameterID { gain, 1 }, "Gain",
-                                              juce::NormalisableRange<float> { -60.0f, 6.0f, 0.0f, 0.6f }, 0.0f, juce::AudioParameterFloatAttributes().withLabel ("dB")));
+                                              juce::NormalisableRange<float> {
+                                                  -60.0f,
+                                                  6.0f,
+                                                  [] (float start, float end, float normalised) {
+                                                      return start + (end - start) * std::pow (normalised, 0.2f);
+                                                  },
+                                                  [] (float start, float end, float value) {
+                                                      return std::pow (juce::jlimit (0.0f, 1.0f, (value - start) / (end - start)), 5.0f);
+                                                  }
+                                              },
+                                              0.0f,
+                                              juce::AudioParameterFloatAttributes().withLabel ("dB")));
     layout.add (std::make_unique<FloatParam> (juce::ParameterID { smooth, 1 }, "Dry / Wet", pct, 1.0f,
                                               juce::AudioParameterFloatAttributes()
                                                   .withLabel ("%")

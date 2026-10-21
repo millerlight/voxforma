@@ -2,7 +2,11 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <cstdio>
 
+#ifdef VOXFORMA_VST3_PATH
+static const char* kBundlePath = VOXFORMA_VST3_PATH;
+#else
 static const char* kBundlePath = "/home/clickibunti2/Dokumente/rea/voxforma/build/voxforma_artefacts/Release/VST3/voxforma.vst3";
+#endif
 
 int main()
 {

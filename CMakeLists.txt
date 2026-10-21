@@ -166,6 +166,7 @@ if(VOXFORMA_BUILD_TESTS AND NOT CMAKE_SYSTEM_NAME STREQUAL "Windows")
         JUCE_VST3_CAN_REPLACE_VST2=0
         JucePlugin_Name="voxforma")
 
+    get_target_property(vox_vst3_artefact_for_smoke voxforma_VST3 JUCE_PLUGIN_ARTEFACT_FILE)
     add_executable(vst3_smoke tests/vst3_smoke.cpp)
     target_link_libraries(vst3_smoke PRIVATE juce::juce_audio_utils juce::juce_recommended_config_flags)
     target_compile_definitions(vst3_smoke PRIVATE
@@ -173,6 +174,7 @@ if(VOXFORMA_BUILD_TESTS AND NOT CMAKE_SYSTEM_NAME STREQUAL "Windows")
         JUCE_USE_CURL=0
         JUCE_USE_XINPUT=0
         JUCE_PLUGINHOST_VST3=1
-        JUCE_VST3_CAN_REPLACE_VST2=0)
+        JUCE_VST3_CAN_REPLACE_VST2=0
+        VOXFORMA_VST3_PATH="${vox_vst3_artefact_for_smoke}")
     add_dependencies(vst3_smoke voxforma_VST3)
 endif()
