@@ -105,4 +105,24 @@ private:
     float rndTarget = 0.0f;
 };
 
+inline juce::NormalisableRange<float> makeLfoRateRange()
+{
+    return {
+        0.03125f,
+        8.0f,
+        [] (float start, float end, float proportion)
+        {
+            return end + (start - end) * juce::jlimit (0.0f, 1.0f, proportion);
+        },
+        [] (float start, float end, float value)
+        {
+            return juce::jlimit (0.0f, 1.0f, (end - value) / (end - start));
+        },
+        [] (float start, float end, float value)
+        {
+            return juce::jlimit (start, end, value);
+        }
+    };
+}
+
 }

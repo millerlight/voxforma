@@ -77,6 +77,17 @@ MasterReading runMaster (vox::FormantEngine& engine, float gainDb, float wetMix0
 
 int main()
 {
+    const auto lfoRateRange = vox::makeLfoRateRange();
+
+    if (! juce::approximatelyEqual (lfoRateRange.convertFrom0to1 (0.0f), 8.0f, juce::absoluteTolerance (1.0e-5f))
+     || ! juce::approximatelyEqual (lfoRateRange.convertFrom0to1 (1.0f), 0.03125f, juce::absoluteTolerance (1.0e-5f))
+     || ! juce::approximatelyEqual (lfoRateRange.convertTo0to1 (8.0f), 0.0f, juce::absoluteTolerance (1.0e-5f))
+     || ! juce::approximatelyEqual (lfoRateRange.convertTo0to1 (0.03125f), 1.0f, juce::absoluteTolerance (1.0e-5f)))
+    {
+        std::printf ("SMOKE FAIL lfoRateRange\n");
+        return 1;
+    }
+
     juce::MidiBuffer midi;
     vox::FormantEngine engine;
     engine.prepare (48000.0, 512, 2);

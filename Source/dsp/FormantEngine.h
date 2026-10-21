@@ -250,7 +250,7 @@ private:
 
     static int divisionIndexFor (float rate)
     {
-        const auto range = juce::NormalisableRange<float> { 0.01f, 2000.0f, 0.0f, 0.25f };
+        const auto range = makeLfoRateRange();
         const float norm = range.convertTo0to1 (rate);
         return juce::jlimit (0, 8, static_cast<int> (std::round (norm * 8.0f)));
     }

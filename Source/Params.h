@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <juce_audio_processors/juce_audio_processors.h>
+#include "dsp/Lfo.h"
 
 namespace vox
 {
@@ -71,7 +72,7 @@ inline juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout
     juce::AudioProcessorValueTreeState::ParameterLayout layout;
 
     auto pct = juce::NormalisableRange<float> { 0.0f, 1.0f, 0.0f, 1.0f };
-    auto lfoRateRange = juce::NormalisableRange<float> { 0.01f, 2000.0f, 0.0f, 0.25f };
+    auto lfoRateRange = makeLfoRateRange();
 
     layout.add (std::make_unique<FloatParam> (juce::ParameterID { vowelAmount, 1 }, "Vowel Amount", pct, 0.0f));
     layout.add (std::make_unique<FloatParam> (juce::ParameterID { emphasis, 1 }, "Emphasis", pct, 0.4f));
