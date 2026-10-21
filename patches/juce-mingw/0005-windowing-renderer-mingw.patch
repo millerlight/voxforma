@@ -1,0 +1,16 @@
+diff --git a/modules/juce_gui_basics/native/juce_Windowing_windows.cpp b/modules/juce_gui_basics/native/juce_Windowing_windows.cpp
+index 18663c5..32ff1fc 100644
+--- a/modules/juce_gui_basics/native/juce_Windowing_windows.cpp
++++ b/modules/juce_gui_basics/native/juce_Windowing_windows.cpp
+@@ -4770,7 +4770,11 @@ extern bool juce_isRunningInWine();
+ 
+ ComponentPeer* Component::createNewPeer (int styleFlags, void* parentHWND)
+ {
++   #if JUCE_MINGW
++    const auto renderer = 0;
++   #else
+     const auto renderer = juce_isRunningInWine() ? 0 : 1;
++   #endif
+     return new HWNDComponentPeer { *this, styleFlags, (HWND) parentHWND, false, renderer };
+ }
+ 

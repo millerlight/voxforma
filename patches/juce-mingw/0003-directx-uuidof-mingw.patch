@@ -1,0 +1,46 @@
+diff --git a/modules/juce_graphics/native/juce_DirectX_windows.cpp b/modules/juce_graphics/native/juce_DirectX_windows.cpp
+index cc66281..6dedcff 100644
+--- a/modules/juce_graphics/native/juce_DirectX_windows.cpp
++++ b/modules/juce_graphics/native/juce_DirectX_windows.cpp
+@@ -640,7 +640,11 @@ DxgiAdapter::Ptr Direct2DDeviceResources::findAdapter (const DxgiAdapters& adapt
+ 
+     ComSmartPtr<IDXGIDevice> device;
+     JUCE_BEGIN_IGNORE_WARNINGS_GCC_LIKE ("-Wlanguage-extension-token")
++   #if JUCE_MINGW
++    surface->GetDevice (__uuidof (IDXGIDevice), (void**) device.resetAndGetPointerAddress());
++   #else
+     surface->GetDevice (__uuidof (device), (void**) device.resetAndGetPointerAddress());
++   #endif
+     JUCE_END_IGNORE_WARNINGS_GCC_LIKE
+ 
+     return findAdapter (adapters, device);
+diff --git a/modules/juce_gui_basics/native/juce_Direct2DHwndContext_windows.cpp b/modules/juce_gui_basics/native/juce_Direct2DHwndContext_windows.cpp
+index c8c9cbc..d7c2b15 100644
+--- a/modules/juce_gui_basics/native/juce_Direct2DHwndContext_windows.cpp
++++ b/modules/juce_gui_basics/native/juce_Direct2DHwndContext_windows.cpp
+@@ -144,7 +144,11 @@ public:
+ 
+         ComSmartPtr<IDXGIDevice> device;
+         JUCE_BEGIN_IGNORE_WARNINGS_GCC_LIKE ("-Wlanguage-extension-token")
++       #if JUCE_MINGW
++        chain->GetDevice (__uuidof (IDXGIDevice), (void**) device.resetAndGetPointerAddress());
++       #else
+         chain->GetDevice (__uuidof (device), (void**) device.resetAndGetPointerAddress());
++       #endif
+         JUCE_END_IGNORE_WARNINGS_GCC_LIKE
+ 
+         createBuffer (Direct2DDeviceResources::findAdapter (directX->adapters, device));
+@@ -188,8 +192,13 @@ private:
+ 
+         ComSmartPtr<IDXGISurface> surface;
+         JUCE_BEGIN_IGNORE_WARNINGS_GCC_LIKE ("-Wlanguage-extension-token")
++       #if JUCE_MINGW
++        if (const auto hr = chain->GetBuffer (0, __uuidof (IDXGISurface), reinterpret_cast<void**> (surface.resetAndGetPointerAddress())); FAILED (hr))
++            return nullptr;
++       #else
+         if (const auto hr = chain->GetBuffer (0, __uuidof (surface), reinterpret_cast<void**> (surface.resetAndGetPointerAddress())); FAILED (hr))
+             return nullptr;
++       #endif
+         JUCE_END_IGNORE_WARNINGS_GCC_LIKE
+ 
+         return surface;

@@ -1,0 +1,26 @@
+diff --git a/modules/juce_graphics/native/juce_Direct2DGraphicsContext_windows.cpp b/modules/juce_graphics/native/juce_Direct2DGraphicsContext_windows.cpp
+index 425055a..707a9ee 100644
+--- a/modules/juce_graphics/native/juce_Direct2DGraphicsContext_windows.cpp
++++ b/modules/juce_graphics/native/juce_Direct2DGraphicsContext_windows.cpp
+@@ -1260,6 +1260,13 @@ void Direct2DGraphicsContext::drawGlyphs (Span<const uint16_t> glyphNumbers,
+             return {};
+         }
+ 
++       #if JUCE_MINGW
++        // The MinGW-w64 DirectWrite headers declare the IDWriteFactory
++        // CreateCustomRenderingParams overloads with incompatible argument
++        // types, so the call below cannot be expressed portably. It only tunes
++        // optional text hinting, so skip it on MinGW.
++        return {};
++       #else
+         ComSmartPtr<IDWriteRenderingParams> customParams;
+ 
+         // Use outline mode (not bitmaps) to preserve the look of older JUCE versions
+@@ -1278,6 +1285,7 @@ void Direct2DGraphicsContext::drawGlyphs (Span<const uint16_t> glyphNumbers,
+         }
+ 
+         return customParams;
++       #endif
+     });
+ 
+     if (newParams != nullptr)

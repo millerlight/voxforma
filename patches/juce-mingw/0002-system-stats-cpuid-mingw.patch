@@ -1,0 +1,13 @@
+diff --git a/modules/juce_core/native/juce_SystemStats_windows.cpp b/modules/juce_core/native/juce_SystemStats_windows.cpp
+index 0ee69c9..63caadd 100644
+--- a/modules/juce_core/native/juce_SystemStats_windows.cpp
++++ b/modules/juce_core/native/juce_SystemStats_windows.cpp
+@@ -80,7 +80,7 @@ static int findNumberOfPhysicalCores() noexcept
+   #pragma intrinsic (__rdtsc)
+  #endif
+ 
+- #if JUCE_CLANG
++ #if JUCE_CLANG || JUCE_MINGW
+ static void callCPUID (int result[4], uint32 type)
+ {
+   uint32 la = 0, lb = 0, lc = 0, ld = 0;

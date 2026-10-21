@@ -1,0 +1,22 @@
+diff --git a/modules/juce_core/system/juce_TargetPlatform.h b/modules/juce_core/system/juce_TargetPlatform.h
+index 4d427ac..6878643 100644
+--- a/modules/juce_core/system/juce_TargetPlatform.h
++++ b/modules/juce_core/system/juce_TargetPlatform.h
+@@ -97,7 +97,7 @@
+ 
+ //==============================================================================
+ #if JUCE_WINDOWS
+-  #ifdef _MSC_VER
++  #if defined (_MSC_VER) || defined (__MINGW32__)
+     #ifdef _WIN64
+       #define JUCE_64BIT 1
+     #else
+@@ -109,7 +109,7 @@
+     #define JUCE_DEBUG 1
+   #endif
+ 
+-  #ifdef __MINGW32__
++  #if defined (__MINGW32__) && ! defined (JUCE_MINGW)
+     #error "MinGW is not supported. Please use an alternative compiler."
+   #endif
+ 
